@@ -1,0 +1,13 @@
+package com.wanguliuwang.dota.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+public class HelloController {
+    public String hello(@RequestParam(name = "name")String name, Model model)
+    {
+        return "hello";
+    }
+}
