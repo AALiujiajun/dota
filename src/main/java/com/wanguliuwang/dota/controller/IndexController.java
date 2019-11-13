@@ -49,8 +49,8 @@ public class IndexController {
     }
 
     @GetMapping("/index")
-    public String index1(HttpServletRequest request, Model model,@RequestParam(name="page",defaultValue = "1") Integer page,@RequestParam(name="size",defaultValue = "5") Integer size) {
-        Cookie[] cookies = request.getCookies();
+    public String index1( Model model,@RequestParam(name="page",defaultValue = "1") Integer page,@RequestParam(name="size",defaultValue = "5") Integer size) {
+       /* Cookie[] cookies = request.getCookies();
         if(cookies!=null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
@@ -62,7 +62,7 @@ public class IndexController {
                     break;
                 }
             }
-        }
+        }*/
         PaginationDTO list=questionService.list(page,size);
         model.addAttribute("pagination",list);
         return "index";

@@ -5,6 +5,7 @@ import com.wanguliuwang.dota.dto.AccessTokenDTO;
 import com.wanguliuwang.dota.model.User;
 import com.wanguliuwang.dota.privider.GithubProvider;
 import com.wanguliuwang.dota.privider.GithubUser;
+import com.wanguliuwang.dota.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -32,7 +33,8 @@ public class AuthorizeController {
     private String redirecturi;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
+
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code, @RequestParam(name="state") String state, HttpServletResponse response, HttpServletRequest request){
@@ -53,14 +55,11 @@ public class AuthorizeController {
             user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccount_id(String.valueOf(githubUser.getId()));
-            user.setGmt_create(System.currentTimeMillis());
-            user.setGmt_modified(user.getGmt_create());
             user.setAvatar_url(githubUser.getAvatar_url());
+            user =  userService.createOrUpdate(user);
             response.addCookie(new Cookie("token",token));
-
-
-            userMapper.insert(user);
-            request.getSession().setAttribute("user",name);
+            request.getSession().setAttribute("user", user.getName());
+            request.getSession().setAttribute("userId", user.getId());
                 return "redirect:index";
         }
         else

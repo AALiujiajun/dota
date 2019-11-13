@@ -24,9 +24,10 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" th:text="${question.title}"></h4>
-                    点击进入查看必学2号位对线技巧！！！<br>
-                    <span th:text="${question.description}"></span><br>
+                    <h4 class="media-heading">
+                    <a  th:href="@{'/question/'+ ${question.id}}" th:text="${question.title}"></a><br/>
+                    <span th:text="${question.description}"></span>
+                    </h4>
                 <span class="text-desc">
                  <span th:text="${question.comment_count}"></span>回复   <span th:text="${question.view_count}"></span>次浏览    <span th:text="${#dates.format(question.gmt_create,'yyyy-MMMM-dd HH:mm')}"></span></span>
                 </div>
