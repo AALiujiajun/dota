@@ -35,6 +35,8 @@ public class AuthorizeController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserMapper userMapper;
 
     @GetMapping("/callback")
     public String callback(@RequestParam(name="code") String code, @RequestParam(name="state") String state, HttpServletResponse response, HttpServletRequest request){
@@ -54,12 +56,11 @@ public class AuthorizeController {
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setName(githubUser.getName());
-            user.setAccount_id(String.valueOf(githubUser.getId()));
-            user.setAvatar_url(githubUser.getAvatar_url());
-            user =  userService.createOrUpdate(user);
+            user.setAccountId(String.valueOf(githubUser.getId()));
+            user.setAvatarUrl(githubUser.getAvatar_url());
+            User orUpdate = userService.createOrUpdate(user);
             response.addCookie(new Cookie("token",token));
-            request.getSession().setAttribute("user", user.getName());
-            request.getSession().setAttribute("userId", user.getId());
+            request.getSession().setAttribute("user", orUpdate);
                 return "redirect:index";
         }
         else
@@ -67,6 +68,15 @@ public class AuthorizeController {
             return "redirect:index";
         }
 
+    }
+    @GetMapping("logout")
+    public String logout(HttpServletRequest request,HttpServletResponse response){
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token",null);
+        cookie.setMaxAge(0);
+
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 
 }

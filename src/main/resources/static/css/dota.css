@@ -29,5 +29,8 @@ body{
 .dota-menu{
     color: #999999;
     font-size: 13px;
-
+}
+.jumbotron
+{
+    margin: 50px;
 }

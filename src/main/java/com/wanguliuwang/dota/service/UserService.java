@@ -2,8 +2,11 @@ package com.wanguliuwang.dota.service;
 
 import com.wanguliuwang.dota.Mapper.UserMapper;
 import com.wanguliuwang.dota.model.User;
+import com.wanguliuwang.dota.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -11,24 +14,33 @@ public class UserService {
     private UserMapper userMapper;
 
     public User createOrUpdate(User user) {
-        User user1=userMapper.findByAccountID(user.getAccount_id());
-
-        if(user1==null)
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andAccountIdEqualTo(user.getAccountId());
+        List<User> users = userMapper.selectByExample(userExample);
+        User user1=new User();
+        if(users.size() ==0)
         {
-            user.setGmt_create(System.currentTimeMillis());
-            user.setGmt_modified(user.getGmt_create());
+            user.setGmtCreate(System.currentTimeMillis());
+            user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
+            return user;
         }
         else
         {
-
-            user1.setGmt_modified(System.currentTimeMillis());
-            user1.setAvatar_url(user.getAvatar_url());
+             user1=users.get(0);
+            user1.setGmtModified(System.currentTimeMillis());
+            user1.setAvatarUrl(user.getAvatarUrl());
             user1.setName(user.getName());
             user1.setToken(user.getToken());
-
-            userMapper.update(user1);
+            User user2 = new User();
+            user2.setGmtModified(System.currentTimeMillis());
+            user2.setAvatarUrl(user.getAvatarUrl());
+            user2.setName(user.getName());
+            user2.setToken(user.getToken());
+            UserExample u2= new UserExample();
+            u2.createCriteria().andIdEqualTo(user1.getId());
+            userMapper.updateByExampleSelective(user2,u2);
         }
-        return  user1;
+    return user1;
     }
 }

@@ -6,6 +6,7 @@ import com.wanguliuwang.dota.dto.PaginationDTO;
 import com.wanguliuwang.dota.dto.QuestionDTO;
 import com.wanguliuwang.dota.model.Question;
 import com.wanguliuwang.dota.model.User;
+import com.wanguliuwang.dota.model.UserExample;
 import com.wanguliuwang.dota.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,19 +30,21 @@ public class IndexController {
     @GetMapping("/")
     public String index(HttpServletRequest request, Model model, @RequestParam(name="page",defaultValue = "1") Integer page,@RequestParam(name="size",defaultValue = "5") Integer size) {
 
-        Cookie[] cookies = request.getCookies();
+       /* Cookie[] cookies = request.getCookies();
         if(cookies!=null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user.getName());
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria().andTokenEqualTo(token);
+                    List<User> users = userMapper.selectByExample(userExample);
+                    if (users.size()!=0) {
+                        request.getSession().setAttribute("user", users.get(0));
                     }
                     break;
                 }
             }
-        }
+        }*/
 
         PaginationDTO list=questionService.list(page,size);
         model.addAttribute("pagination",list);
@@ -50,19 +53,6 @@ public class IndexController {
 
     @GetMapping("/index")
     public String index1( Model model,@RequestParam(name="page",defaultValue = "1") Integer page,@RequestParam(name="size",defaultValue = "5") Integer size) {
-       /* Cookie[] cookies = request.getCookies();
-        if(cookies!=null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user.getName());
-                    }
-                    break;
-                }
-            }
-        }*/
         PaginationDTO list=questionService.list(page,size);
         model.addAttribute("pagination",list);
         return "index";

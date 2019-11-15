@@ -52,7 +52,8 @@ public class ProfileController {
             model.addAttribute("section","repies");
             model.addAttribute("sectionName","最新回复");
         }
-        PaginationDTO list=questionService.list(userId,page,size);
+        User user= (User) request.getSession().getAttribute("user");
+        PaginationDTO list=questionService.list(user.getId(),page,size);
         model.addAttribute("pagination",list);
         return "profile";
     }
