@@ -23,24 +23,6 @@ public class ProfileController {
     @GetMapping("/profile/{action}")
     public String profile( HttpServletRequest request,@PathVariable(name = "action")String action, Model model, @RequestParam(name="page",defaultValue = "1") Integer page, @RequestParam(name="size",defaultValue = "5") Integer size){
 
-       Integer userId= (Integer) request.getSession().getAttribute("userId");
-  /*      Cookie[] cookies = request.getCookies();
-        if(cookies!=null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user.getName());
-                    }
-                    break;
-                }
-            }
-        }
-        if(user==null)
-        {
-            return "redirect:index";
-        }*/
 
         if("questions".equals(action))
         {
