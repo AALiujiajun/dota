@@ -76,7 +76,7 @@ function collapseComments(e) {
                             "class": "media-left",
                         }).append($("<img/>", {
                         "class": "media-object img-rounded",
-                        "src": comment.user.avatarUrl,
+                        "src": comment.user.avatarUrl
                     }));
 
 
@@ -92,7 +92,7 @@ function collapseComments(e) {
                     })).append($("<div/>", {
                         "class": "menu",
                     }).append($("<span/>",{ "class": "pull-right",
-                        "html": comment.gmtCreate,
+                        "html": moment(comment.gmtCreate).format('YYYY-MM-DD')
                     })));
 
 
@@ -105,7 +105,6 @@ function collapseComments(e) {
                     var commentElement = $("<div/>",
                         {
                             "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 comments",
-                            html: comment.content
                         }).append(mediaElement);
                     subCommentContainer.prepend(commentElement);
                 });
